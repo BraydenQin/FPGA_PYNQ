@@ -13,9 +13,9 @@ def generate_int8_matrices(
         if value <= 0:
             raise ValueError(f"{name} must be positive, got {value}")
 
-    rng = np.random.default_rng(seed)
-    input_a = rng.integers(-128, 128, size=(M, K), dtype=np.int16).astype(np.int8)
-    input_b = rng.integers(-128, 128, size=(K, N), dtype=np.int16).astype(np.int8)
+    np.random.seed(seed)
+    input_a = np.random.randint(-128, 128, size=(M, K), dtype=np.int16).astype(np.int8)
+    input_b = np.random.randint(-128, 128, size=(K, N), dtype=np.int16).astype(np.int8)
     return input_a, input_b
 
 
