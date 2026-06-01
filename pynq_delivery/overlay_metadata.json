@@ -1,0 +1,63 @@
+{
+  "overlay_name": "matmul_overlay",
+  "files": {
+    "bit": "matmul_overlay.bit",
+    "hwh": "matmul_overlay.hwh",
+    "xsa": "matmul_overlay.xsa",
+    "register_map": "register_map.actual.json",
+    "driver_header": "xmatmul_accel_hw.h",
+    "csynth_report": "csynth.rpt",
+    "documentation": "PYNQ_Delivery_Guide.docx"
+  },
+  "ip": {
+    "instance_name": "matmul_accel_0",
+    "component_name": "design_1_matmul_accel_0_0",
+    "vlnv": "xilinx.com:hls:matmul_accel:1.0",
+    "axi_lite_baseaddr": "0x40000000",
+    "axi_lite_highaddr": "0x4000FFFF"
+  },
+  "data_contract": {
+    "input_a": "int8[M, K], row-major",
+    "input_b": "int8[K, N], row-major",
+    "output_c": "int32[M, N], row-major",
+    "equation": "C = (A @ B) >> shift"
+  },
+  "registers": {
+    "CTRL": "0x00",
+    "GIE": "0x04",
+    "IER": "0x08",
+    "ISR": "0x0c",
+    "A_ADDR": "0x10",
+    "A_ADDR_HIGH": "0x14",
+    "B_ADDR": "0x1c",
+    "B_ADDR_HIGH": "0x20",
+    "C_ADDR": "0x28",
+    "C_ADDR_HIGH": "0x2c",
+    "M": "0x34",
+    "K": "0x3c",
+    "N": "0x44",
+    "SHIFT": "0x4c"
+  },
+  "integration_notes": [
+    "Keep the .bit and .hwh files in the same directory with the same base name.",
+    "Use ip_name matmul_accel_0 when opening the overlay from PYNQ.",
+    "The IP accesses DDR directly through m_axi ports; no separate CDMA stage is required."
+  ],
+  "implementation_status": {
+    "synth_1": "passed",
+    "impl_1": "passed",
+    "route_design": "passed",
+    "write_bitstream": "passed",
+    "write_hw_platform": "passed",
+    "timing": {
+      "wns_ns": 2.580,
+      "whs_ns": 0.022
+    }
+  },
+  "equivalence_checks": {
+    "design_1_wrapper.bit.sha256": "2e9b6f7214ed19079ae2e06fba39ef57bd0077f9c5e9e98501a5444c064c9740",
+    "matmul_overlay.bit.sha256": "2e9b6f7214ed19079ae2e06fba39ef57bd0077f9c5e9e98501a5444c064c9740",
+    "design_1_wrapper.hwh.sha256": "2eca46402408cf94fc2c9a02d2ec80d32e0960eab0d0ed5eff07fb5095786f15",
+    "matmul_overlay.hwh.sha256": "2eca46402408cf94fc2c9a02d2ec80d32e0960eab0d0ed5eff07fb5095786f15"
+  }
+}

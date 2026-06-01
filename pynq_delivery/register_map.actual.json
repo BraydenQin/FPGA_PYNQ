@@ -1,0 +1,16 @@
+{
+  "CTRL": "0x00",
+  "GIE": "0x04",
+  "IER": "0x08",
+  "ISR": "0x0c",
+  "A_ADDR": "0x10",
+  "A_ADDR_HIGH": "0x14",
+  "B_ADDR": "0x1c",
+  "B_ADDR_HIGH": "0x20",
+  "C_ADDR": "0x28",
+  "C_ADDR_HIGH": "0x2c",
+  "M": "0x34",
+  "K": "0x3c",
+  "N": "0x44",
+  "SHIFT": "0x4c"
+}

@@ -1,0 +1,212 @@
+
+
+================================================================
+== Synthesis Summary Report of 'matmul_accel'
+================================================================
++ General Information: 
+    * Date:           Mon Jun  1 07:11:54 2026
+    * Version:        2024.1 (Build 5069499 on May 21 2024)
+    * Project:        matmul_accel_prj
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg400-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +--------------------------------------------+------+------+---------+--------+----------+---------+------+----------+--------+---------+-----------+-----------+-----+
+    |                   Modules                  | Issue|      | Latency | Latency| Iteration|         | Trip |          |        |         |           |           |     |
+    |                   & Loops                  | Type | Slack| (cycles)|  (ns)  |  Latency | Interval| Count| Pipelined|  BRAM  |   DSP   |     FF    |    LUT    | URAM|
+    +--------------------------------------------+------+------+---------+--------+----------+---------+------+----------+--------+---------+-----------+-----------+-----+
+    |+ matmul_accel                              |     -|  0.00|        -|       -|         -|        -|     -|        no|  4 (1%)|   5 (2%)|  3882 (3%)|  4065 (7%)|    -|
+    | o VITIS_LOOP_55_1                          |     -|  7.30|        -|       -|         -|        -|     -|        no|       -|        -|          -|          -|    -|
+    |  o VITIS_LOOP_56_2                         |     -|  7.30|        -|       -|         -|        -|     -|        no|       -|        -|          -|          -|    -|
+    |   + matmul_accel_Pipeline_VITIS_LOOP_15_1  |     -|  0.00|        -|       -|         -|        -|     -|        no|       -|  1 (~0%)|  360 (~0%)|  403 (~0%)|    -|
+    |    o VITIS_LOOP_15_1                       |     -|  7.30|        -|       -|        14|        1|     -|       yes|       -|        -|          -|          -|    -|
+    +--------------------------------------------+------+------+---------+--------+----------+---------+------+----------+--------+---------+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface   | Read/Write | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|             |            | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_gmem0 | READ_ONLY  | 8 -> 8     | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=1            |
+| m_axi_gmem1 | READ_ONLY  | 8 -> 8     | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=1            |
+| m_axi_gmem2 | WRITE_ONLY | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 7             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register   | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL       | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER       | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER     | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR     | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | input_a_1  | 0x10   | 32    | W      | Data signal of input_a           |                                                                      |
+| s_axi_control | input_a_2  | 0x14   | 32    | W      | Data signal of input_a           |                                                                      |
+| s_axi_control | input_b_1  | 0x1c   | 32    | W      | Data signal of input_b           |                                                                      |
+| s_axi_control | input_b_2  | 0x20   | 32    | W      | Data signal of input_b           |                                                                      |
+| s_axi_control | output_c_1 | 0x28   | 32    | W      | Data signal of output_c          |                                                                      |
+| s_axi_control | output_c_2 | 0x2c   | 32    | W      | Data signal of output_c          |                                                                      |
+| s_axi_control | M          | 0x34   | 32    | W      | Data signal of M                 |                                                                      |
+| s_axi_control | K          | 0x3c   | 32    | W      | Data signal of K                 |                                                                      |
+| s_axi_control | N          | 0x44   | 32    | W      | Data signal of N                 |                                                                      |
+| s_axi_control | shift      | 0x4c   | 32    | W      | Data signal of shift             |                                                                      |
++---------------+------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++----------+-----------+---------------------+
+| Argument | Direction | Datatype            |
++----------+-----------+---------------------+
+| input_a  | in        | signed char const * |
+| input_b  | in        | signed char const * |
+| output_c | out       | int*                |
+| M        | in        | int                 |
+| K        | in        | int                 |
+| N        | in        | int                 |
+| shift    | in        | int                 |
++----------+-----------+---------------------+
+
+* SW-to-HW Mapping
++----------+---------------+-----------+----------+--------------------------------------+
+| Argument | HW Interface  | HW Type   | HW Usage | HW Info                              |
++----------+---------------+-----------+----------+--------------------------------------+
+| input_a  | m_axi_gmem0   | interface |          | channel=0                            |
+| input_a  | s_axi_control | register  | offset   | name=input_a_1 offset=0x10 range=32  |
+| input_a  | s_axi_control | register  | offset   | name=input_a_2 offset=0x14 range=32  |
+| input_b  | m_axi_gmem1   | interface |          | channel=0                            |
+| input_b  | s_axi_control | register  | offset   | name=input_b_1 offset=0x1c range=32  |
+| input_b  | s_axi_control | register  | offset   | name=input_b_2 offset=0x20 range=32  |
+| output_c | m_axi_gmem2   | interface |          | channel=0                            |
+| output_c | s_axi_control | register  | offset   | name=output_c_1 offset=0x28 range=32 |
+| output_c | s_axi_control | register  | offset   | name=output_c_2 offset=0x2c range=32 |
+| M        | s_axi_control | register  |          | name=M offset=0x34 range=32          |
+| K        | s_axi_control | register  |          | name=K offset=0x3c range=32          |
+| N        | s_axi_control | register  |          | name=N offset=0x44 range=32          |
+| shift    | s_axi_control | register  |          | name=shift offset=0x4c range=32      |
++----------+---------------+-----------+----------+--------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+----------+-------+-----------------+----------------------------+
+| HW Interface | Direction | Length   | Width | Loop            | Loop Location              |
++--------------+-----------+----------+-------+-----------------+----------------------------+
+| m_axi_gmem0  | read      | variable | 8     | VITIS_LOOP_15_1 | src/matmul_accel.cpp:15:22 |
+| m_axi_gmem2  | write     | variable | 32    |                 |                            |
++--------------+-----------+----------+-------+-----------------+----------------------------+
+
+* All M_AXI Variable Accesses
++--------------+----------+----------------------------+-----------+--------------+----------+-----------------+----------------------------+------------+-------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable | Access Location            | Direction | Burst Status | Length   | Loop            | Loop Location              | Resolution | Problem                                                                                               |
++--------------+----------+----------------------------+-----------+--------------+----------+-----------------+----------------------------+------------+-------------------------------------------------------------------------------------------------------+
+| m_axi_gmem0  | input_a  | src/matmul_accel.cpp:17:55 | read      | Widen Fail   |          | VITIS_LOOP_15_1 | src/matmul_accel.cpp:15:22 | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0  |
+| m_axi_gmem0  | input_a  | src/matmul_accel.cpp:17:55 | read      | Fail         |          | VITIS_LOOP_56_2 | src/matmul_accel.cpp:56:26 | 214-229    | Could not analyze pattern                                                                             |
+| m_axi_gmem0  | input_a  | src/matmul_accel.cpp:17:55 | read      | Inferred     | variable | VITIS_LOOP_15_1 | src/matmul_accel.cpp:15:22 |            |                                                                                                       |
+| m_axi_gmem1  | input_b  | src/matmul_accel.cpp:18:62 | read      | Fail         |          | VITIS_LOOP_15_1 | src/matmul_accel.cpp:15:22 | 214-230    | Stride is incompatible                                                                                |
+| m_axi_gmem2  | output_c | src/matmul_accel.cpp:59:37 | write     | Widen Fail   |          | VITIS_LOOP_56_2 | src/matmul_accel.cpp:56:26 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem2  | output_c | src/matmul_accel.cpp:59:37 | write     | Inferred     | variable | VITIS_LOOP_55_1 | src/matmul_accel.cpp:55:22 |            |                                                                                                       |
++--------------+----------+----------------------------+-----------+--------------+----------+-----------------+----------------------------+------------+-------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++------------------------------------------+-----+--------+-------------+-------+-----------+---------+
+| Name                                     | DSP | Pragma | Variable    | Op    | Impl      | Latency |
++------------------------------------------+-----+--------+-------------+-------+-----------+---------+
+| + matmul_accel                           | 5   |        |             |       |           |         |
+|   icmp_ln51_fu_222_p2                    |     |        | icmp_ln51   | setlt | auto      | 0       |
+|   icmp_ln51_1_fu_228_p2                  |     |        | icmp_ln51_1 | setlt | auto      | 0       |
+|   icmp_ln51_2_fu_234_p2                  |     |        | icmp_ln51_2 | setlt | auto      | 0       |
+|   or_ln51_fu_248_p2                      |     |        | or_ln51     | or    | auto      | 0       |
+|   or_ln51_1_fu_254_p2                    |     |        | or_ln51_1   | or    | auto      | 0       |
+|   or_ln51_2_fu_260_p2                    |     |        | or_ln51_2   | or    | auto      | 0       |
+|   mul_32ns_32ns_62_2_1_U11               | 4   |        | mul_ln55    | mul   | auto      | 1       |
+|   add_ln55_1_fu_326_p2                   |     |        | add_ln55_1  | add   | fabric    | 0       |
+|   icmp_ln55_fu_331_p2                    |     |        | icmp_ln55   | seteq | auto      | 0       |
+|   add_ln55_fu_336_p2                     |     |        | add_ln55    | add   | fabric    | 0       |
+|   empty_31_fu_346_p2                     |     |        | empty_31    | add   | fabric    | 0       |
+|   icmp_ln56_fu_357_p2                    |     |        | icmp_ln56   | seteq | auto      | 0       |
+|   add_ln56_fu_362_p2                     |     |        | add_ln56    | add   | fabric    | 0       |
+|   ashr_ln59_fu_379_p2                    |     |        | ashr_ln59   | ashr  | auto_pipe | 0       |
+|  + matmul_accel_Pipeline_VITIS_LOOP_15_1 | 1   |        |             |       |           |         |
+|    icmp_ln15_fu_162_p2                   |     |        | icmp_ln15   | seteq | auto      | 0       |
+|    add_ln15_fu_167_p2                    |     |        | add_ln15    | add   | fabric    | 0       |
+|    add_ln18_2_fu_176_p2                  |     |        | add_ln18_2  | add   | fabric    | 0       |
+|    mac_muladd_8s_8s_32s_32_4_1_U1        | 1   |        | mul_ln19    | mul   | dsp_slice | 3       |
+|    mac_muladd_8s_8s_32s_32_4_1_U1        | 1   |        | sext_ln19   | sext  | dsp_slice | 3       |
+|    mac_muladd_8s_8s_32s_32_4_1_U1        | 1   |        | accum       | add   | dsp_slice | 3       |
++------------------------------------------+-----+--------+-------------+-------+-----------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
++-------------------+-----------+-----------+------+------+--------+----------+------+---------+------------------+
+| Name              | Usage     | Type      | BRAM | URAM | Pragma | Variable | Impl | Latency | Bitwidth, Depth, |
+|                   |           |           |      |      |        |          |      |         | Banks            |
++-------------------+-----------+-----------+------+------+--------+----------+------+---------+------------------+
+| + matmul_accel    |           |           | 4    | 0    |        |          |      |         |                  |
+|   control_s_axi_U | interface | s_axilite |      |      |        |          |      |         |                  |
+|   gmem0_m_axi_U   | interface | m_axi     | 1    |      |        |          |      |         |                  |
+|   gmem1_m_axi_U   | interface | m_axi     | 1    |      |        |          |      |         |                  |
+|   gmem2_m_axi_U   | interface | m_axi     | 2    |      |        |          |      |         |                  |
++-------------------+-----------+-----------+------+------+--------+----------+------+---------+------------------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++--------------+-----------------------------------------------+---------------------------------------------------+
+| Type         | Options                                       | Location                                          |
++--------------+-----------------------------------------------+---------------------------------------------------+
+| pipeline     | II=1                                          | src/matmul_accel.cpp:16 in multiply_accumulate    |
+| interface    | m_axi port=input_a offset=slave bundle=gmem0  | src/matmul_accel.cpp:36 in matmul_accel, input_a  |
+| interface    | m_axi port=input_b offset=slave bundle=gmem1  | src/matmul_accel.cpp:37 in matmul_accel, input_b  |
+| interface    | m_axi port=output_c offset=slave bundle=gmem2 | src/matmul_accel.cpp:38 in matmul_accel, output_c |
+| interface    | s_axilite port=input_a bundle=control         | src/matmul_accel.cpp:39 in matmul_accel, input_a  |
+| interface    | s_axilite port=input_b bundle=control         | src/matmul_accel.cpp:40 in matmul_accel, input_b  |
+| interface    | s_axilite port=output_c bundle=control        | src/matmul_accel.cpp:41 in matmul_accel, output_c |
+| interface    | s_axilite port=M bundle=control               | src/matmul_accel.cpp:42 in matmul_accel, M        |
+| interface    | s_axilite port=K bundle=control               | src/matmul_accel.cpp:43 in matmul_accel, K        |
+| interface    | s_axilite port=N bundle=control               | src/matmul_accel.cpp:44 in matmul_accel, N        |
+| interface    | s_axilite port=shift bundle=control           | src/matmul_accel.cpp:45 in matmul_accel, shift    |
+| interface    | s_axilite port=return bundle=control          | src/matmul_accel.cpp:46 in matmul_accel, return   |
+| loop_flatten | off                                           | src/matmul_accel.cpp:57 in matmul_accel           |
++--------------+-----------------------------------------------+---------------------------------------------------+
+
+
