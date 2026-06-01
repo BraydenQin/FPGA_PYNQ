@@ -1,9 +1,8 @@
-from __future__ import annotations
-
 import argparse
 import csv
 import sys
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -51,7 +50,8 @@ def main() -> None:
         raise SystemExit(1)
 
 
-def write_csv(rows: list[dict], csv_out: Path | None) -> None:
+def write_csv(rows, csv_out):
+    # type: (List[Dict[str, Any]], Optional[Path]) -> None
     fieldnames = [
         "case",
         "M",
@@ -76,7 +76,8 @@ def write_csv(rows: list[dict], csv_out: Path | None) -> None:
         print(f"Wrote benchmark CSV to {csv_out}")
 
 
-def print_markdown(rows: list[dict]) -> None:
+def print_markdown(rows):
+    # type: (List[Dict[str, Any]]) -> None
     headers = [
         "case",
         "M",

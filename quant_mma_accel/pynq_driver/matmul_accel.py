@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 import time
-from typing import Any
+from typing import Any, Dict, Tuple
 
 import numpy as np
 
@@ -29,7 +27,7 @@ class MatmulAccel:
 
     def run_with_timing(
         self, input_a: np.ndarray, input_b: np.ndarray, shift: int
-    ) -> tuple[np.ndarray, dict[str, float]]:
+    ) -> Tuple[np.ndarray, Dict[str, float]]:
         """Run hardware matmul and return result plus timing dict."""
         self._validate_inputs(input_a, input_b, shift)
         M, K = input_a.shape

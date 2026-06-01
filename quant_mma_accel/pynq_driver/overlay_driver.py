@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 
 class OverlayDriver:
     def __init__(self, bitfile: str, ip_name: str):

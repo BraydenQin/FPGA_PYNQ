@@ -15,6 +15,14 @@
 
 PC 端不需要安装 `pynq`。所有 PYNQ 相关 import 都延迟到板端运行时执行。
 
+## Python 版本兼容性
+
+当前工作区已按 Python 3.6.5 做兼容处理。
+
+- 源码避免使用 Python 3.7+ 才支持的语法，例如 `from __future__ import annotations`、`list[str]`、`dict[str, int]` 和 `A | B`。
+- `requirements.txt` 固定在最后一批仍支持 Python 3.6 的 `numpy` 和 `pytest` 版本范围内。
+- 如果你的 Python 3.6 环境里 `pip` 版本过新，需要先降到 `pip<22`，因为新版本 `pip` 已经不支持 Python 3.6。
+
 ## 当前状态
 
 当前软件侧框架已经可以在 PC 端完成：
@@ -55,6 +63,7 @@ quant_mma_accel/
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
+python -m pip install --upgrade "pip<22"
 pip install -r requirements.txt
 python scripts/generate_vectors.py --M 16 --K 64 --N 16 --shift 7 --seed 0 --out test_vectors/default
 python scripts/run_cpu_check.py --vectors test_vectors/default
@@ -65,6 +74,13 @@ pytest
 
 ```bash
 source .venv/bin/activate
+```
+
+如果板端已经自带 Python 3.6.5 和 PYNQ，通常只需要执行：
+
+```bash
+python -m pip install --upgrade "pip<22"
+pip install -r requirements.txt
 ```
 
 PC 端验收通过后，说明软件参考实现、测试向量和不依赖 PYNQ 的模块已经可用。

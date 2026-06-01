@@ -1,15 +1,13 @@
-from __future__ import annotations
-
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Tuple, Union
 
 import numpy as np
 
 
 def generate_int8_matrices(
     M: int, K: int, N: int, seed: int = 0
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """Generate deterministic INT8 matrices A[M,K] and B[K,N]."""
     for name, value in {"M": M, "K": K, "N": N}.items():
         if value <= 0:
@@ -22,12 +20,13 @@ def generate_int8_matrices(
 
 
 def save_test_vectors(
-    output_dir: str | Path,
+    output_dir,
     input_a: np.ndarray,
     input_b: np.ndarray,
     golden_c: np.ndarray,
-    metadata: dict[str, Any],
+    metadata,
 ) -> None:
+    # type: (Union[str, Path], np.ndarray, np.ndarray, np.ndarray, Dict[str, Any]) -> None
     """Save input_a.npy, input_b.npy, golden_c.npy, and metadata.json."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -56,7 +55,8 @@ def save_test_vectors(
         metadata_file.write("\n")
 
 
-def load_test_vectors(vector_dir: str | Path) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+def load_test_vectors(vector_dir):
+    # type: (Union[str, Path]) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Dict[str, Any]]
     """Load vectors and metadata."""
     vector_path = Path(vector_dir)
     input_a = np.load(vector_path / "input_a.npy")

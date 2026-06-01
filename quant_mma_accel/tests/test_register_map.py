@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 
 import pytest
@@ -13,6 +11,7 @@ def test_register_map_parses_hex_int_and_high_word_offsets(tmp_path) -> None:
         json.dumps(
             {
                 "CTRL": "0x00",
+
                 "A_ADDR": "0x10",
                 "A_ADDR_HIGH": "0x14",
                 "B_ADDR": 0x20,

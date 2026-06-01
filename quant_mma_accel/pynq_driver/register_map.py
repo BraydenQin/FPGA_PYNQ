@@ -1,8 +1,6 @@
-from __future__ import annotations
-
 import json
-from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, Optional, Tuple, Union
 
 
 def _parse_offset(name: str, value: object) -> int:
@@ -21,22 +19,36 @@ def _parse_offset(name: str, value: object) -> int:
     raise TypeError(f"offset {name} must be an integer or string, got {type(value).__name__}")
 
 
-@dataclass(frozen=True)
 class RegisterMap:
-    CTRL: int
-    A_ADDR: int
-    B_ADDR: int
-    C_ADDR: int
-    M: int
-    K: int
-    N: int
-    SHIFT: int
-    A_ADDR_HIGH: int | None = None
-    B_ADDR_HIGH: int | None = None
-    C_ADDR_HIGH: int | None = None
+    def __init__(
+        self,
+        CTRL,
+        A_ADDR,
+        B_ADDR,
+        C_ADDR,
+        M,
+        K,
+        N,
+        SHIFT,
+        A_ADDR_HIGH=None,
+        B_ADDR_HIGH=None,
+        C_ADDR_HIGH=None,
+    ):
+        self.CTRL = CTRL
+        self.A_ADDR = A_ADDR
+        self.B_ADDR = B_ADDR
+        self.C_ADDR = C_ADDR
+        self.M = M
+        self.K = K
+        self.N = N
+        self.SHIFT = SHIFT
+        self.A_ADDR_HIGH = A_ADDR_HIGH
+        self.B_ADDR_HIGH = B_ADDR_HIGH
+        self.C_ADDR_HIGH = C_ADDR_HIGH
 
     @classmethod
-    def from_json(cls, path: str | Path) -> "RegisterMap":
+    def from_json(cls, path):
+        # type: (Union[str, Path]) -> "RegisterMap"
         with Path(path).open("r", encoding="utf-8") as register_file:
             raw = json.load(register_file)
 
@@ -57,14 +69,16 @@ class RegisterMap:
 
         return cls(**parsed)
 
-    def address_offsets(self, base: str) -> tuple[int, int | None]:
+    def address_offsets(self, base):
+        # type: (str) -> Tuple[int, Optional[int]]
         """Return low and optional high-word offsets for A_ADDR, B_ADDR, or C_ADDR."""
         if base not in {"A_ADDR", "B_ADDR", "C_ADDR"}:
             raise ValueError(f"unknown address register base {base!r}")
         return getattr(self, base), getattr(self, f"{base}_HIGH")
 
 
-def _find_high_word_key(raw: dict[str, object], base: str) -> str | None:
+def _find_high_word_key(raw, base):
+    # type: (Dict[str, object], str) -> Optional[str]
     aliases = (
         f"{base}_HIGH",
         f"{base}_HI",

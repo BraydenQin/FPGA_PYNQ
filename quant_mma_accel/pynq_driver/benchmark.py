@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 import time
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -9,7 +8,8 @@ from software.cpu_ref import matmul_int8_ref
 from software.test_vectors import generate_int8_matrices
 
 
-def run_benchmark(cases: list[dict], accel: MatmulAccel) -> list[dict]:
+def run_benchmark(cases, accel):
+    # type: (List[Dict[str, Any]], MatmulAccel) -> List[Dict[str, Any]]
     """Run multiple M/K/N/shift cases and return result rows."""
     rows = []
     for index, case in enumerate(cases):

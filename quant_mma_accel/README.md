@@ -16,6 +16,14 @@ The first version targets the minimal closed loop:
 
 The project does not require `pynq` on a PC. PYNQ imports are delayed until board-side code is executed.
 
+## Python Version
+
+The workspace is kept compatible with Python 3.6.5.
+
+- Source files avoid Python 3.7+ only syntax such as `from __future__ import annotations`, builtin generic types like `list[str]`, and union syntax like `A | B`.
+- `requirements.txt` is pinned to the last `numpy` and `pytest` lines that still support Python 3.6.
+- If your Python 3.6 environment has a newer `pip`, downgrade it first because recent `pip` releases dropped Python 3.6 support.
+
 ## Layout
 
 ```text
@@ -36,6 +44,7 @@ From this directory:
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
+python -m pip install --upgrade "pip<22"
 pip install -r requirements.txt
 python scripts/generate_vectors.py --M 16 --K 64 --N 16 --shift 7 --seed 0 --out test_vectors/default
 python scripts/run_cpu_check.py --vectors test_vectors/default
@@ -43,6 +52,13 @@ pytest
 ```
 
 On Linux or PYNQ, activate the virtual environment with `source .venv/bin/activate` instead.
+
+If the board already ships with Python 3.6.5 and PYNQ preinstalled, you usually only need:
+
+```bash
+python -m pip install --upgrade "pip<22"
+pip install -r requirements.txt
+```
 
 ## PYNQ Board Flow
 
