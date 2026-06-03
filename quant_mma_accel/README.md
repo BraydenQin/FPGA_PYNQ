@@ -68,35 +68,28 @@ Copy this project to the board, for example:
 /home/xilinx/jupyter_notebooks/matmul_accel/quant_mma_accel
 ```
 
-Place the hardware files here:
+The default overlay source is the XSA exported by the hardware project:
 
 ```text
-overlays/matmul_overlay.bit
-overlays/matmul_overlay.hwh
+../fpga_hardware/accelerator_hardware/AI_accelerator.xsa
 ```
 
-Generate or copy test vectors, then run:
+The driver extracts the contained `.bit/.hwh` into `overlays/generated/` before loading the overlay. Generate or copy test vectors, then run:
 
 ```bash
 python scripts/run_pynq_once.py \
-  --bitfile overlays/matmul_overlay.bit \
-  --ip-name matmul_accel_0 \
-  --register-map configs/register_map.example.json \
   --vectors test_vectors/default
 ```
 
 Run the default benchmark cases:
 
 ```bash
-python scripts/run_benchmark.py \
-  --bitfile overlays/matmul_overlay.bit \
-  --ip-name matmul_accel_0 \
-  --register-map configs/register_map.example.json
+python scripts/run_benchmark.py
 ```
 
 ## Register Map
 
-The example register map contains placeholder offsets. Replace `configs/register_map.example.json` with offsets from the HLS/Vivado driver header, such as `xmatmul_accel_hw.h`.
+The default register map is `configs/register_map.fpga_hardware.json`, with offsets from the HLS/Vivado driver header under `fpga_hardware/accelerator_hardware`.
 
 Required logical registers:
 

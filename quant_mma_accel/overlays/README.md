@@ -1,10 +1,11 @@
-# Overlay Files
+# Overlay Cache
 
-Place the Vivado-exported files here:
+The software flow now uses the Vivado hardware export in `fpga_hardware` as the source of truth:
 
 ```text
-matmul_overlay.bit
-matmul_overlay.hwh
+../fpga_hardware/accelerator_hardware/AI_accelerator.xsa
 ```
 
-Keep the `.bit` and `.hwh` base names identical so PYNQ can find the hardware handoff metadata when loading the overlay.
+When a `.xsa` file is passed to the PYNQ driver, the driver extracts the contained `.bit` and `.hwh` into `overlays/generated/` with matching base names, then loads the generated `.bit` through `pynq.Overlay`.
+
+Do not copy `.bit/.hwh` from `pynq_delivery` for the default software flow.

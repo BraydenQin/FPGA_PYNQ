@@ -9,6 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+DEFAULT_OVERLAY_SOURCE = ROOT.parent / "fpga_hardware" / "accelerator_hardware" / "AI_accelerator.xsa"
+DEFAULT_REGISTER_MAP = ROOT / "configs" / "register_map.fpga_hardware.json"
+
 from pynq_driver.matmul_accel import MatmulAccel
 from pynq_driver.register_map import RegisterMap
 from software.cpu_ref import matmul_int8_ref
@@ -17,9 +20,16 @@ from software.test_vectors import load_test_vectors
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run one PYNQ matmul accelerator validation.")
-    parser.add_argument("--bitfile", type=str, required=True)
-    parser.add_argument("--ip-name", type=str, required=True)
-    parser.add_argument("--register-map", type=Path, required=True)
+    parser.add_argument(
+        "--overlay-source",
+        "--bitfile",
+        dest="overlay_source",
+        type=str,
+        default=str(DEFAULT_OVERLAY_SOURCE),
+        help="Overlay source from fpga_hardware; accepts .xsa directly or a prepared .bit file.",
+    )
+    parser.add_argument("--ip-name", type=str, default="matmul_accel_0")
+    parser.add_argument("--register-map", type=Path, default=DEFAULT_REGISTER_MAP)
     parser.add_argument("--vectors", type=Path, required=True)
     parser.add_argument("--timeout-s", type=float, default=5.0)
     return parser.parse_args()
@@ -37,7 +47,7 @@ def main() -> None:
         raise ValueError("stored golden_c.npy does not match CPU recomputation")
 
     register_map = RegisterMap.from_json(args.register_map)
-    accel = MatmulAccel(args.bitfile, args.ip_name, register_map, timeout_s=args.timeout_s)
+    accel = MatmulAccel(args.overlay_source, args.ip_name, register_map, timeout_s=args.timeout_s)
     fpga_c, timing = accel.run_with_timing(input_a, input_b, shift)
 
     diff = fpga_c.astype(np.int64) - golden_c.astype(np.int64)

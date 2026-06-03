@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "K": 512,
+    "M": 16,
+    "N": 512,
+    "seed": 0,
+    "shift": 7,
+    "source": "synthetic"
+  },
+  "rows": [
+    {
+      "backend": "cpu",
+      "kernel_time_ms": 5.906700000000015,
+      "time_ms": 5.906700000000015
+    }
+  ]
+}

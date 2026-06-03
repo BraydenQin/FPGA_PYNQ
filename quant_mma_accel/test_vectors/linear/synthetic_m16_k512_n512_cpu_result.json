@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "K": 512,
+    "M": 16,
+    "N": 512,
+    "note": "Synthetic LLM-like INT8 linear layer case for CPU/FPGA comparison.",
+    "seed": 0,
+    "shift": 7,
+    "source": "test_vectors\\linear\\synthetic_m16_k512_n512.npz"
+  },
+  "rows": [
+    {
+      "backend": "cpu",
+      "kernel_time_ms": 5.735199999999995,
+      "time_ms": 5.735199999999995
+    }
+  ]
+}

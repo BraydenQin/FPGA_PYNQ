@@ -4,7 +4,8 @@
   "N": 16,
   "shift": 7,
   "seed": 0,
-  "overlay_bitfile": "overlays/matmul_overlay.bit",
+  "overlay_source": "../fpga_hardware/accelerator_hardware/AI_accelerator.xsa",
+  "overlay_bitfile": "../fpga_hardware/accelerator_hardware/AI_accelerator.xsa",
   "ip_name": "matmul_accel_0",
-  "register_map": "configs/register_map.example.json"
+  "register_map": "configs/register_map.fpga_hardware.json"
 }

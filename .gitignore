@@ -1,2 +1,7 @@
 软件驱动与验证Plan.md
 小组分工.md
+
+__pycache__/
+*.py[cod]
+.venv/
+quant_mma_accel/overlays/generated/

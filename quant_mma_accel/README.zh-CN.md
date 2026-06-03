@@ -6,7 +6,7 @@
 
 - 在 PC 或 PYNQ 板端生成确定性的 INT8 输入矩阵。
 - 使用 NumPy 计算 INT32 golden result：`C = (A @ B) >> shift`。
-- 在 PYNQ 板端加载 Vivado 导出的 `.bit/.hwh` overlay。
+- 在 PYNQ 板端从硬件工程导出的 `.xsa` 准备并加载 overlay。
 - 使用 PYNQ 分配物理连续 buffer。
 - 通过 AXI Lite 寄存器配置 HLS IP。
 - 启动 IP，轮询 `ap_done`，并设置超时避免程序卡死。
@@ -35,13 +35,12 @@ PC 端不需要安装 `pynq`。所有 PYNQ 相关 import 都延迟到板端运�
 - benchmark 脚本。
 - Notebook 演示入口。
 
-还需要硬件同学提供以下文件和信息后，才能完成真实 FPGA 性能测试：
+当前默认使用硬件工程中的 XSA 和寄存器表完成真实 FPGA 性能测试：
 
-- `matmul_overlay.bit`
-- `matmul_overlay.hwh`
-- 真实 HLS/Vivado control register map，例如 `xmatmul_accel_hw.h`
-- IP 名称，例如 `matmul_accel_0`
-- A/B/C 的数据类型、矩阵形状、row-major 布局和 shift 规则
+- `../fpga_hardware/accelerator_hardware/AI_accelerator.xsa`
+- `configs/register_map.fpga_hardware.json`
+- IP 名称：`matmul_accel_0`
+- A/B/C 的数据类型、矩阵形状、row-major 布局和 shift 规则沿用硬件工程导出的 HLS IP。
 
 ## 目录结构
 
@@ -53,7 +52,7 @@ quant_mma_accel/
   scripts/                  命令行入口
   tests/                    PC 端单元测试
   test_vectors/             生成的 .npy 测试数据
-  overlays/                 放置 Vivado 导出的 .bit/.hwh 文件
+  overlays/                 XSA 提取出的 .bit/.hwh 运行缓存
 ```
 
 ## PC 端开发和验收
@@ -93,20 +92,16 @@ PC 端验收通过后，说明软件参考实现、测试向量和不依赖 PYNQ
 /home/xilinx/jupyter_notebooks/matmul_accel/quant_mma_accel
 ```
 
-把硬件文件放到：
+默认 overlay 来源是硬件工程导出的 XSA：
 
 ```text
-overlays/matmul_overlay.bit
-overlays/matmul_overlay.hwh
+../fpga_hardware/accelerator_hardware/AI_accelerator.xsa
 ```
 
-确认 `configs/register_map.example.json` 已经替换为真实寄存器 offset 后，运行单次硬件验证：
+驱动会在运行时把 XSA 里的 `.bit/.hwh` 提取到 `overlays/generated/`，然后交给 PYNQ 加载。运行单次硬件验证：
 
 ```bash
 python scripts/run_pynq_once.py \
-  --bitfile overlays/matmul_overlay.bit \
-  --ip-name matmul_accel_0 \
-  --register-map configs/register_map.example.json \
   --vectors test_vectors/default
 ```
 
@@ -115,17 +110,14 @@ python scripts/run_pynq_once.py \
 运行默认 benchmark：
 
 ```bash
-python scripts/run_benchmark.py \
-  --bitfile overlays/matmul_overlay.bit \
-  --ip-name matmul_accel_0 \
-  --register-map configs/register_map.example.json
+python scripts/run_benchmark.py
 ```
 
 benchmark 会输出多组矩阵尺寸下的 CPU 时间、FPGA kernel 时间、端到端时间和正确性结果。
 
 ## 寄存器表说明
 
-`configs/register_map.example.json` 目前是占位模板。真实 offset 必须以 HLS/Vivado 导出的 driver header 为准，例如 `xmatmul_accel_hw.h`。
+默认使用 `configs/register_map.fpga_hardware.json`，其 offset 来自 `fpga_hardware/accelerator_hardware` 下 HLS/Vivado 导出的 `xmatmul_accel_hw.h`。
 
 必须确认的逻辑寄存器：
 
@@ -190,4 +182,4 @@ offset 可以写成 JSON 整数，也可以写成十六进制字符串，例如�
 
 ## 完成度说明
 
-如果只看 VS Code / PC 端软件开发，本项目已经具备完整框架和可运行测试。最终验收还需要在 PYNQ-Z2 上加载真实 `.bit/.hwh` 文件，并使用真实寄存器表完成硬件正确性验证和性能测试。
+如果只看 VS Code / PC 端软件开发，本项目已经具备完整框架和可运行测试。最终验收需要在 PYNQ-Z2 上使用 `fpga_hardware` 的 XSA 加载 overlay，并完成硬件正确性验证和性能测试。
