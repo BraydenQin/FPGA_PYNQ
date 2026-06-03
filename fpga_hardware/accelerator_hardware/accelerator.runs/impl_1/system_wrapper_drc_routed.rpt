@@ -1,0 +1,67 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date         : Wed Jun  3 05:38:04 2026
+| Host         : LAPTOP-SV114DSC running 64-bit major release  (build 9200)
+| Command      : report_drc -file system_wrapper_drc_routed.rpt -pb system_wrapper_drc_routed.pb -rpx system_wrapper_drc_routed.rpx
+| Design       : system_wrapper
+| Device       : xc7z020clg400-1
+| Speed File   : -1
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 3
++-----------+----------+----------------------------+--------+
+| Rule      | Severity | Description                | Checks |
++-----------+----------+----------------------------+--------+
+| PDRC-138  | Warning  | SLICE_PairEqSame_D6D5_WARN | 2      |
+| RTSTAT-10 | Warning  | No routable loads          | 1      |
++-----------+----------+----------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+PDRC-138#1 Warning
+SLICE_PairEqSame_D6D5_WARN  
+Luts D6LUT and D5LUT in use in site SLICE_X48Y76 with different equations without A6 pin connected to Global Logic High.
+Related violations: <none>
+
+PDRC-138#2 Warning
+SLICE_PairEqSame_D6D5_WARN  
+Luts D6LUT and D5LUT in use in site SLICE_X51Y82 with different equations without A6 pin connected to Global Logic High.
+Related violations: <none>
+
+RTSTAT-10#1 Warning
+No routable loads  
+20 net(s) have no routable loads. The problem bus(es) and/or net(s) are system_i/smartconnect_0/inst/m01_nodes/m01_ar_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/m01_nodes/m01_aw_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/m01_nodes/m01_b_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/m01_nodes/m01_r_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/m01_nodes/m01_w_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s00_nodes/s00_aw_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s00_nodes/s00_b_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s00_nodes/s00_w_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s01_nodes/s01_ar_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s01_nodes/s01_r_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s02_nodes/s02_ar_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s02_nodes/s02_r_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/s03_nodes/s03_aw_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/switchboards/i_nodes/i_ar_node/inst/mi_handler_m_sc_areset_pipe,
+system_i/smartconnect_0/inst/switchboards/i_nodes/i_w_node/inst/mi_handler_m_sc_areset_pipe
+ (the first 15 of 20 listed nets/buses).
+Related violations: <none>
+
+

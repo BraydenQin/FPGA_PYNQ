@@ -1,0 +1,32 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.923358",
+   "Default View_TopLeft":"3,-576",
+   "ExpandedHierarchyInLayout":"",
+   "PinnedBlocks":"/processing_system7_0|",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 3 -x 1200 -y -130 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 3 -x 1200 -y -110 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 2 -x 940 -y -80 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 1 -x 480 -y -90 -defaultsOSRD
+preplace inst smartconnect_0 -pg 1 -lvl 1 -x 480 -y -380 -defaultsOSRD
+preplace inst matmul_accel_0 -pg 1 -lvl 2 -x 940 -y -270 -defaultsOSRD
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 3 300 -260 740 50 1140
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 0 2 310 -250 650
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 3 270 70 NJ 70 1160
+preplace netloc processing_system7_0_DDR 1 2 1 NJ -130
+preplace netloc processing_system7_0_FIXED_IO 1 2 1 NJ -110
+preplace netloc processing_system7_0_M_AXI_GP0 1 0 3 260 40 NJ 40 1150
+preplace netloc matmul_accel_0_m_axi_gmem0 1 0 3 310 -490 N -490 1140
+preplace netloc matmul_accel_0_m_axi_gmem1 1 0 3 280 60 N 60 1180
+preplace netloc matmul_accel_0_m_axi_gmem2 1 0 3 290 30 N 30 1170
+preplace netloc smartconnect_0_M01_AXI 1 1 1 660 -370n
+levelinfo -pg 1 -60 480 940 1200
+pagesize -pg 1 -db -bbox -sgen -60 -670 1400 840
+"
+}
+{
+   "da_axi4_cnt":"5",
+   "da_ps7_cnt":"1"
+}
